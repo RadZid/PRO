@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>جامعة PU - كتيب الجامعة</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;700;900&display=swap');
+        
+        :root {
+            --primary: #0a2e52;
+            --secondary: #d4af37;
+            --accent: #8b0000;
+            --light: #f8f9fa;
+            --dark: #212529;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .brochure-container {
+            display: flex;
+            box-shadow: 0 30px 50px rgba(0, 0, 0, 0.3);
+            transform-style: preserve-3d;
+            perspective: 2000px;
+            height: 842px;
+            width: 595px;
+            position: relative;
+            transform: scale(0.8);
+            transform-origin: top right; /* Changed for RTL */
+        }
+        
+        .brochure-page {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            backface-visibility: hidden;
+            transition: transform 0.3s;
+            padding: 30px;
+            overflow: hidden;
+            text-align: right; /* RTL alignment */
+        }
+        
+        .front {
+            background: linear-gradient(135deg, rgba(10,46,82,0.9) 0%, rgba(10,46,82,1) 100%);
+            color: white;
+            transform-origin: right; /* Flipped for RTL */
+            z-index: 2;
+        }
+        
+        .back {
+            background: white;
+            transform-origin: left; /* Flipped for RTL */
+            z-index: 1;
+            transform: rotateY(180deg);
+        }
+        
+        .brochure-container.flipped .front {
+            transform: rotateY(-180deg);
+        }
+        
+        .brochure-container.flipped .back {
+            transform: rotateY(0deg);
+        }
+        
+        .flip-btn {
+            position: absolute;
+            bottom: 20px;
+            left: 20px; /* Changed from right for RTL */
+            background-color: var(--secondary);
+            color: var(--primary);
+            border: none;
+            padding: 10px 20px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 30px;
+            z-index: 10;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+        }
+        
+        .flip-btn:hover {
+            background-color: var(--accent);
+            color: white;
+            transform: translateY(-3px);
+        }
+        
+        .university-logo {
+            width: 100px;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+position: absolute;
+  top: 10px;
+left: 8%;
+        }
+        
+        h1 {
+            font-family: 'Tajawal', sans-serif;
+            font-weight: 900;
+            font-size: 2.5rem;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .front h1 {
+            color: var(--secondary);
+        }
+        
+        .tagline {
+            font-size: 1rem;
+            font-weight: 300;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+            max-width: 80%;
+        }
+        
+        .highlight-box {
+            background-color: rgba(212, 175, 55, 0.2);
+            border-right: 4px solid var(--secondary); /* Changed from left */
+            border-left: none;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .stats-container {
+            display: flex;
+            justify-content: space-between;
+            margin: 2px 0;
+        }
+        
+        .stat-item {
+            text-align: center;
+            flex: 1;
+        }
+        
+        .stat-number {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 2px 0;
+        }
+        
+        .program-card {
+            background-color: white;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+            font-size: 0.8rem;
+        }
+        
+        .program-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .program-title {
+            color: var(--primary);
+            font-weight: 700;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+        
+        .campus-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            margin: 5px 0;
+            border-radius: 5px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        
+        .contact-info {
+            margin-top: 5px;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+            font-size: 0.7rem;
+        }
+        
+        .contact-icon {
+            margin-left: 10px; /* Changed from right */
+            margin-right: 0;
+            color: var(--secondary);
+        }
+        
+        .qr-code {
+            width: 80px;
+            height: 80px;
+            background-color: #eee;
+            margin: 5px auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.7rem;
+            color: var(--dark);
+        }
+        
+        .gold-text {
+            color: var(--secondary);
+        }
+        
+        .section-title {
+            font-family: 'Tajawal', sans-serif;
+            font-size: 0.95rem;
+            margin: 10px 0 20px;
+            color: var(--primary);
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0; /* Changed from left */
+            width: 60px;
+            height: 3px;
+            background-color: var(--secondary);
+        }
+        
+        .back .section-title:after {
+            background-color: var(--accent);
+        }
+        
+ 
+.faculty-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 3px;
+     margin: 15px auto;
+
+    width: calc(5 * 110px + 2 * 6px); /* Exact width for 5 cards + gaps */
+}
+
+.faculty-card {
+    width: 110px;
+    background-color: var(--light);
+    padding: 1px;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 0.7rem;
+}        
+        .faculty-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 10px;
+            border: 3px solid var(--secondary);
+        }
+        
+        .footer {
+            margin-top: 2px;
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--dark);
+        }
+        
+        .back .footer {
+            margin-top: 2px;
+            font-size: 0.8rem;
+            color: var(--primary);
+        }
+        
+        .watermark {
+            position: absolute;
+            bottom: 10px;
+            right: 40px; /* Changed from left */
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+        
+        .flourish {
+            position: absolute;
+            opacity: 0.1;
+            z-index: -1;
+        }
+        
+        .flourish-1 {
+            top: -50px;
+            left: -50px; /* Changed from right */
+            font-size: 300px;
+            color: var(--secondary);
+        }
+        
+        .flourish-2 {
+            bottom: -50px;
+            right: -50px; /* Changed from left */
+            font-size: 300px;
+            color: var(--accent);
+        }
+
+
+
+.creative-front {
+  position: relative;
+  overflow: hidden;
+  color: white;
+}
+
+.video-background {
+  position: absolute;
+  top: 55%;
+  left: 50%;
+  width: 90%;
+  height: 40%;
+  z-index: 0;
+  transform: translateX(-50%);  /* Shifts it back by half its width */
+
+}
+
+.video-background video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.video-overlay {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  width: 100%;
+  height: 89%;
+  background: rgba(10, 46, 82, 0.6);
+  transform: translateX(-50%);  /* Shifts it back by half its width */
+
+}
+
+.animated-logo {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 30px;
+  z-index: 2;
+}
+
+.logo-circle {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.5));
+}
+
+.typewriter-heading {
+  text-align: center;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 2;
+}
+
+.typewriter-heading h1 {
+  font-family: 'Tajawal', sans-serif;
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 15px;
+  color: white;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+}
+
+.title-highlight {
+  width: 100px;
+  height: 4px;
+  background: #d4af37;
+  margin: 0 auto;
+  transform: scaleX(0);
+  transform-origin: left;
+  animation: highlight 1.5s ease-in-out forwards 3s;
+}
+
+@keyframes highlight {
+  to { transform: scaleX(1); }
+}
+
+.floating-stats {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin: 10px 0;
+  z-index: 2;
+  position: relative;
+}
+
+.stat-card {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  padding: 5px;
+  width: 180px;
+  text-align: center;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  transition: transform 0.5s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-card:hover {
+  transform: translateY(-10px);
+}
+
+.stat-icon {
+  font-size: 2rem;
+  margin-bottom: 5px;
+}
+
+.stat-number {
+  font-size: 2.1rem;
+  font-weight: 700;
+  margin: 8px 0;
+  color: #d4af37;
+}
+
+.stat-label {
+  font-size: 1rem;
+}
+
+.stat-wave {
+  position: absolute;
+  bottom: -30px;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 1200 120" xmlns="http://www.w3.org/2000/svg"><path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" fill="%23d4af37" opacity=".25"/></svg>');
+  background-size: cover;
+  animation: wave 8s linear infinite;
+}
+
+@keyframes wave {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.explore-btn {
+  position: relative;
+  background: transparent;
+  color: white;
+  border: 2px solid #d4af37;
+  padding: 13px 40px;
+  font-size: 1.2rem;
+  border-radius: 50px;
+  cursor: pointer;
+  overflow: hidden;
+  z-index: 2;
+  display: block;
+  margin: 0 auto;
+  transition: all 0.5s ease;
+}
+
+.hover-circle {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  background: rgba(212, 175, 55, 0.3);
+  border-radius: 50%;
+  transform: scale(0);
+  transition: transform 0.5s ease;
+  top: 50%;
+  left: 50%;
+  z-index: -1;
+}
+
+.explore-btn:hover {
+  background: rgba(212, 175, 55, 0.1);
+}
+
+.explore-btn:hover .hover-circle {
+  transform: scale(4);
+}
+
+.floating-elements div {
+  position: absolute;
+  color: rgba(212, 175, 55, 0.5);
+  font-size: 1.5rem;
+  animation: float 6s infinite ease-in-out;
+}
+
+.floating-elements .element-1 {
+  top: 20%;
+  left: 10%;
+  animation-delay: 0s;
+}
+
+.floating-elements .element-2 {
+  top: 70%;
+  right: 15%;
+  animation-delay: 2s;
+}
+
+.floating-elements .element-3 {
+  bottom: 30%;
+  left: 20%;
+  animation-delay: 4s;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-20px) rotate(10deg); }
+}
+
+        
+        @media print {
+            body {
+                background: none;
+                padding: 0;
+            }
+            
+            .brochure-container {
+                box-shadow: none;
+                height: auto;
+                width: auto;
+                page-break-after: always;
+            }
+            
+            .flip-btn {
+                display: none;
+            }
+            
+            .front, .back {
+                position: static;
+                transform: none !important;
+                page-break-after: always;
+            }
+        }
+
+ 
+
+    .mute-unmute-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 24px;
+      background: rgba(0, 0, 0, 0.5);
+      color: white;
+      padding: 10px;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    .mute-unmute-btn:hover {
+      background: rgba(0, 0, 0, 0.7);
+    }
+
+    </style>
+</head>
+<body>
+    <div class="brochure-container" id="brochure">
+        <!-- Front Page -->
+ 
+<div class="brochure-page front creative-front">
+  <!-- فيديو خلفية متحرك -->
+  <div class="video-background">
+    <video autoplay loop playsinline muted controls>
+      <source src="son.mp4" type="video/mp4">
+      <!-- Fallback image if video doesn't load -->
+      <img src="fallback-image.jpg" alt="حرم جامعي">
+    </video>
+    <div class="video-overlay"></div>
+  <!-- Mute/Unmute Button with Icon -->
+  <div class="mute-unmute-btn" id="mute-unmute-btn">
+    <i class="fas fa-volume-mute"></i> <!-- Mute icon initially -->
+  </div>
+
+  </div>
+
+
+  <!-- شعار متحرك -->
+  <div class="animated-logo">
+             <img src="llogo.png" alt="PU University Logo" class="university-logo">
+
+
+    <svg class="logo-circle" viewBox="0 0 100 100">
+
+      <circle cx="50" cy="50" r="45" stroke="#d4af37" stroke-width="3" fill="none" stroke-dasharray="283" stroke-dashoffset="283">
+        <animate attributeName="stroke-dashoffset" values="283;0" dur="2s" fill="freeze" begin="1s"/>
+
+
+      </circle>
+
+
+
+
+    </svg>
+<svg width="123" height="50">
+  <text x="50%" y="12" text-anchor="middle" fill="#d4af37" font-size="20" font-weight="bold">جامعة PTUK</text>
+</svg>
+
+ 
+
+  </div>
+
+  <!-- العنوان الرئيسي مع تأثير الكتابة -->
+  <div class="typewriter-heading">
+    <h1 id="typewriter-text"></h1>
+    <div class="title-highlight"></div>
+  </div>
+
+  <!-- بطاقات إحصائية متحركة -->
+  <div class="floating-stats">
+    <div class="stat-card" data-stat="3">
+      <div class="stat-icon">🏛️</div>
+      <div class="stat-number">0</div>
+      <div class="stat-label">فروع</div>
+      <div class="stat-wave"></div>
+    </div>
+    
+    <div class="stat-card" data-stat="1050">
+      <div class="stat-icon">🎓</div>
+      <div class="stat-number">0</div>
+      <div class="stat-label">طالب/ة</div>
+      <div class="stat-wave"></div>
+    </div>
+
+    <div class="stat-card" data-stat="20">
+      <div class="stat-icon">💡</div>
+      <div class="stat-number">0</div>
+      <div class="stat-label">منحة واعفاء</div>
+      <div class="stat-wave"></div>
+    </div>
+
+    <div class="stat-card" data-stat="108">
+      <div class="stat-icon">📚</div>
+      <div class="stat-number">0</div>
+      <div class="stat-label">برنامج أكاديمي</div>
+      <div class="stat-wave"></div>
+    </div>
+  </div>
+
+  <!-- زر تفاعلي -->
+  <a href="https://ptuk.edu.ps" target="_blank">ptuk>
+  <button class="explore-btn" id="exploreBtn">
+    <span>المزيد عن الجامعة</span>
+    <div class="hover-circle"></div>
+  </button>
+</a>
+  <!-- عناصر جمالية متحركة -->
+  <div class="floating-elements">
+    <div class="element-1">✧</div>
+    <div class="element-2">✦</div>
+    <div class="element-3">✧</div>
+  </div>
+</div>
+        
+        <!-- Back Page -->
+        <div class="brochure-page back">
+            <h1 class="section-title">التميز <span class="gold-text">الأكاديمي</span></h1>
+            
+            <p>تقدم جامعة PTUK تجربة تعليمية تقنية رائدة عبر كلياتها التسعة المتميزة:</p>
+            
+            <div class="faculty-grid">
+                <div class="faculty-card">
+                    <img src="aa.png" alt="كلية" class="faculty-image">
+                    <h3>الدراسات العليا</h3>
+                </div>
+                <div class="faculty-card">
+                    <img src="aa.png" alt="كلية" class="faculty-image">
+                    <h3>تكنولوجيا المعلومات والذكاء الاصطناعي</h3>
+                </div>
+                <div class="faculty-card">
+                    <img src="aa.png" alt="كلية" class="faculty-image">
+                    <h3>الهندسة والتكنولوجيا</h3>
+                </div>
+                <div class="faculty-card">
+                    <img src="aa.png" alt="كلية" class="faculty-image">
+                    <h3>العلوم التطبيقية</h3>
+                </div>
+
+               <div class="faculty-card">
+                    <img src="aa.png" alt="كلية" class="faculty-image">
+                    <h3> فلسطين التقنية</h3>
+                </div>
+                 <div class="faculty-card">
+                    <img src="aa.png" alt="كلية" class="faculty-image">
+                    <h3>الأعمال والاقتصاد</h3>
+                </div>
+                  <div class="faculty-card">
+                    <img src="aa.png" alt="كلية" class="faculty-image">
+                    <h3>العلوم والتكنولوجيا الزراعية</h3>
+                </div>
+                <div class="faculty-card">
+                    <img src="aa.png" alt="كلية" class="faculty-image">
+                    <h3>الآداب والعلوم التربوية</h3>
+                </div>
+                <div class="faculty-card">
+                    <img src="aa.png" alt="كلية" class="faculty-image">
+                    <h3>التربية البدنية وعلوم الرياضة</h3>
+                </div>
+
+            </div>
+            
+            <h1 class="section-title">البرامج <span class="gold-text">المميزة</span></h1>
+            
+            <div class="program-card">
+                <h3 class="program-title">الذكاء الاصطناعي</h3>
+                <p>برنامجنا الرائد الذي يجمع بين علوم الحاسوب والبيانات وتعلم الآلة مع فرص توظيف في كبرى الشركات التقنية.</p>
+            </div>
+            
+            <div class="program-card">
+                <h3 class="program-title"> المحاسبة والتحليل المالي</h3>
+                <p>برنامج ماجستير جديد استجابة فعلية لحاجة المؤسسات والشركات إلى كفاءات متقدمة في مجالات المحاسبة والتحليل المالي، خاصة في ظل التطورات المتسارعة في بيئة الأعمال والمعايير الدولية،</p>
+            </div>
+            
+            <div class="program-card">
+                <h3 class="program-title">التصوير الطبي والأشعة التشخيصية</h3>
+                <p>برنامج متطور يدمج الطب والتكنولوجيا، يهدف إلى تأهيل كوادر مختصة بتقنيات التصوير الطبي الحديثة.</p>
+            </div>
+            
+            <div class="qr-code">
+ 
+        
+           <img src="qq.png" alt="كلية" class="qr-code">
+               
+            </div>
+            
+            <div class="footer">
+                <p>انضم إلى مجتمعنا من المبتكرين والمبدعين والقادة.</p>
+                <p><strong>جامعة فلسطين التقنية - خضوري / جامعة الدولة</strong></p>
+            </div>
+        </div>
+        
+        <button class="flip-btn" id="flipBtn">التالي</button>
+    </div>
+
+    <script>
+        document.getElementById('flipBtn').addEventListener('click', function() {
+            document.getElementById('brochure').classList.toggle('flipped');
+            this.textContent = document.getElementById('brochure').classList.contains('flipped') 
+                ? 'عرض الصفحة الأمامية' 
+                : 'عرض الصفحة الخلفية';
+        });
+        
+ // تأثير الكتابة الآلية
+const typewriterText = "نحو مستقبل أكثر إشراقًا";
+const typewriterElement = document.getElementById('typewriter-text');
+let i = 0;
+
+function typeWriter() {
+  if (i < typewriterText.length) {
+    typewriterElement.innerHTML += typewriterText.charAt(i);
+    i++;
+    setTimeout(typeWriter, 100);
+  }
+}
+
+// عدادات الإحصاءات
+function animateStats() {
+  const statCards = document.querySelectorAll('.stat-card');
+  
+  statCards.forEach(card => {
+    const target = parseInt(card.getAttribute('data-stat'));
+    const duration = 2000;
+    const step = target / (duration / 16);
+    let current = 0;
+    const numberElement = card.querySelector('.stat-number');
+    
+    const counter = setInterval(() => {
+      current += step;
+      if (current >= target) {
+        clearInterval(counter);
+        current = target;
+      }
+      numberElement.textContent = Math.floor(current);
+    }, 16);
+  });
+}
+
+// تهيئة الصفحة
+document.addEventListener('DOMContentLoaded', function() {
+  // بدء تأثير الكتابة بعد 1 ثانية
+  setTimeout(typeWriter, 1000);
+  
+  // بدء عدادات الإحصاءات بعد 3 ثواني
+  setTimeout(animateStats, 3000);
+  
+  // تأثير الزر التفاعلي
+  const exploreBtn = document.getElementById('exploreBtn');
+  exploreBtn.addEventListener('mousemove', function(e) {
+    const rect = this.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    this.querySelector('.hover-circle').style.left = x + 'px';
+    this.querySelector('.hover-circle').style.top = y + 'px';
+  });
+});
+
+
+   document.addEventListener('DOMContentLoaded', function () {
+    const video = document.querySelector('video');
+    const muteButton = document.getElementById('mute-unmute-btn');
+    const muteIcon = muteButton.querySelector('i');
+
+    // First click will unmute and play the video
+    muteButton.addEventListener('click', function () {
+      if (video.muted) {
+        video.muted = false;  // Unmute
+        muteIcon.classList.remove('fa-volume-mute');
+        muteIcon.classList.add('fa-volume-up');  // Change to unmute icon
+        video.play();  // Start playing
+      } else {
+        video.muted = true;  // Mute
+        muteIcon.classList.remove('fa-volume-up');
+        muteIcon.classList.add('fa-volume-mute');  // Change to mute icon
+ 
+      }
+    });
+  });
+ 
+
+    </script>
+</body>
+</html>
